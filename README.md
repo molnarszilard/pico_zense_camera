@@ -5,7 +5,8 @@
 
 ```bash
 cd ~/catkin_ws/src
-git clone https://github.com/Funderburger/pico_zense_camera.git
+(originally from: git clone https://github.com/Funderburger/pico_zense_camera.git)
+git clone https://github.com/molnarszilard/pico_zense_camera.git
 cd ..
 catkin_make 
 source devel/setup.bash
@@ -35,6 +36,8 @@ Follow these steps if you want to use depthimage_to_laserscan package:
 3. Start the laser scan: 
 
 `roslaunch pico_zense_camera depth_laser_scan.launch`
+
+(if there is no such package as depthimage to laser scan: git clone https://github.com/ros-perception/depthimage_to_laserscan.git)
 
 4. Run "The Savior": 
 
