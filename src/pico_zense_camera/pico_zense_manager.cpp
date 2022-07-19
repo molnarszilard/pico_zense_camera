@@ -288,8 +288,11 @@ void PicoSenseManager::run() {
                                                               sensor_msgs::image_encodings::BGR8, //TYPE_8UC3,
                                                               colour_mat).toImageMsg();
         sensor_msgs::ImagePtr depth_msg = cv_bridge::CvImage(depth_ci->header,
-                                                             sensor_msgs::image_encodings::TYPE_16UC1, //TYPE_16UC1,
+                                                             sensor_msgs::image_encodings::TYPE_16UC1,
                                                              depth_mat).toImageMsg();
+        sensor_msgs::ImagePtr aligned_msg = cv_bridge::CvImage(aligned_ci->header,
+                                                             sensor_msgs::image_encodings::TYPE_16UC1,
+                                                             aligned_depth_to_colour_mat).toImageMsg();
         sensor_msgs::ImagePtr ir_msg = cv_bridge::CvImage(aligned_ci->header,
                                                                sensor_msgs::image_encodings::MONO16,
                                                                ir_mat).toImageMsg();
@@ -298,9 +301,9 @@ void PicoSenseManager::run() {
                                                                    aligned_depth_vis_mat).toImageMsg();
         this->colour_pub_.publish(colour_msg, colour_ci);
         this->depth_pub_.publish(depth_msg, depth_ci);
-        //this->aligned_pub_.publish(aligned_msg, aligned_ci);
+        this->aligned_pub_.publish(aligned_msg, aligned_ci);
         this->ir_pub_.publish(ir_msg, aligned_ci);
-        //aligned_depth_vis_pub.publish(aligned_vis_msg);
+        aligned_depth_vis_pub.publish(aligned_vis_msg);
         this->imu_pub_.publish(imu_msg);
 
         // Process any callbacks
@@ -391,7 +394,6 @@ void PicoSenseManager::set_sensor_intrinsics() {
                   colour_intrinsics_.cy, 0, 0, 1};
     info_msg.P = {colour_intrinsics_.fx, 0, colour_intrinsics_.cx, 0, 0, colour_intrinsics_.fy,
                   colour_intrinsics_.cy, 0, 0, 0, 1, 0};
-    info_msg.R = {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
     colour_info_->setCameraInfo(info_msg);
     aligned_info_->setCameraInfo(info_msg);
 
@@ -402,8 +404,6 @@ void PicoSenseManager::set_sensor_intrinsics() {
                   0, 1};
     info_msg.P = {depth_intrinsics_.fx, 0, depth_intrinsics_.cx, 0, 0, depth_intrinsics_.fy, depth_intrinsics_.cy,
                   0, 0, 0, 1, 0};
-    // info_msg.R = {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
-    info_msg.R = {1., 0., 0., 0., 1., 0., 0., 0., 1.};
     depth_info_->setCameraInfo(info_msg);
 
     ROS_INFO("Successfully received intrinsic and extrinsic parameters for device %d", this->device_index_);

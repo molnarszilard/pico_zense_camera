@@ -1,0 +1,11 @@
+<launch>
+    <node pkg="nodelet" type="nodelet" args="manager" name="depth_transforms_manager" output="screen"/>
+<node pkg="nodelet" type="nodelet" name="cloudify"
+    args="load depth_image_proc/point_cloud_xyzrgb depth_transforms_manager --no-bond">
+        <remap from="rgb/image_rect_color" to="/pico_zense/colour/image_raw"/>
+        <remap from="rgb/camera_info" to="/pico_zense/colour/camera_info"/>
+        <remap from="depth_registered/camera_info" to="/pico_zense/aligned_depth_to_colour/camera_info"/>
+        <remap from="depth_registered/image_rect" to="/pico_zense/aligned_depth_to_colour/image_raw"/>
+        <remap from="depth_registered/points" to="/pico_zense/depth/pointsrgb"/>
+    </node>
+</launch>
