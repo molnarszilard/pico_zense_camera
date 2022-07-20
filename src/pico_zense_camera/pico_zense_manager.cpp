@@ -394,6 +394,7 @@ void PicoSenseManager::set_sensor_intrinsics() {
                   colour_intrinsics_.cy, 0, 0, 1};
     info_msg.P = {colour_intrinsics_.fx, 0, colour_intrinsics_.cx, 0, 0, colour_intrinsics_.fy,
                   colour_intrinsics_.cy, 0, 0, 0, 1, 0};
+    info_msg.R = {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
     colour_info_->setCameraInfo(info_msg);
     aligned_info_->setCameraInfo(info_msg);
 
@@ -404,6 +405,8 @@ void PicoSenseManager::set_sensor_intrinsics() {
                   0, 1};
     info_msg.P = {depth_intrinsics_.fx, 0, depth_intrinsics_.cx, 0, 0, depth_intrinsics_.fy, depth_intrinsics_.cy,
                   0, 0, 0, 1, 0};
+    // info_msg.R = {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
+    info_msg.R = {1., 0., 0., 0., 1., 0., 0., 0., 1.};
     depth_info_->setCameraInfo(info_msg);
 
     ROS_INFO("Successfully received intrinsic and extrinsic parameters for device %d", this->device_index_);
